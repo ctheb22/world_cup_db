@@ -21,15 +21,15 @@ INSERT_TEAM () {
 }
 
 HEADER=1
-cat games.csv | while IFS="," read -r YEAR ROUND WINNER OPPONENT WINNER_GOALS OPPONENT_GOALS
+cat games.csv | while IFS="," read YEAR ROUND WINNER OPPONENT WINNER_GOALS OPPONENT_GOALS
 do
   if [[ $HEADER == 1 ]]
   then
     (( HEADER-- ))
   else
-    INSERT_TEAM $WINNER
+    INSERT_TEAM "$WINNER"
     WINNER_ID=$TEAM_ID 
-    INSERT_TEAM $OPPONENT
+    INSERT_TEAM "$OPPONENT"
     OPPONENT_ID=$TEAM_ID
     RESULT=$($PSQL "INSERT INTO games(year, round, winner_id, opponent_id, winner_goals, opponent_goals) VALUES($YEAR, '$ROUND', $WINNER_ID, $OPPONENT_ID, $WINNER_GOALS, $OPPONENT_GOALS)")
   fi
